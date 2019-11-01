@@ -5,10 +5,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-public class conexion {
+public class Datos {
     private String db,url,user,clave;
+    private boolean con;
 
-    public conexion() {
+    public Datos() {
+    }
+
+    public boolean isCon() {
+        return con;
+    }
+
+    public void setCon(boolean con) {
+        this.con = con;
     }
 
     public void setDb(String db) {
@@ -46,11 +55,13 @@ public class conexion {
     public Connection conectar(){
         Connection link = null;
         try {
-            //Cargamos el driver de conexion
+            //Cargamos el driver de Datos
             Class.forName("org.postgresql.Driver");
             link = DriverManager.getConnection(getUrl()+getDb(),getUser(),getClave());
+            setCon(true);
             JOptionPane.showConfirmDialog(null, "Conexión establecida con la base de datos llamada: "+ getDb());
         } catch (ClassNotFoundException | SQLException e) {
+            setCon(false);
             JOptionPane.showConfirmDialog(null, e);
         }
         return link;
