@@ -2,16 +2,47 @@ package com.tecnoshared.estadistica.GUI;
 
 import com.tecnoshared.estadistica.Logica.Datos;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class EstadisticaDescriptiva extends javax.swing.JFrame {
     Datos posgres = new Datos();
     private Connection cn;
+    private String sSQL="";
+    private Integer totalregistros;
+    private String Accion;
+    
     public EstadisticaDescriptiva() {
         initComponents();
         inhabilitarConexion();
         inhabilitar();
     }
+
+    public void setAccion(String Accion) {
+        this.Accion = Accion;
+    }
+
+    public void setsSQL(String sSQL) {
+        this.sSQL = sSQL;
+    }
+
+    public void setTotalregistros(Integer totalregistros) {
+        this.totalregistros = totalregistros;
+    }
+
+    public String getsSQL() {
+        return sSQL;
+    }
+
+    public Integer getTotalregistros() {
+        return totalregistros;
+    }
+
+    public String getAccion() {
+        return Accion;
+    }
+    
     public void inhabilitarConexion(){
         txtClave.setEnabled(false);
         txtDB.setEnabled(false);
@@ -47,6 +78,26 @@ public class EstadisticaDescriptiva extends javax.swing.JFrame {
         posgres.setUser(txtUser.getText());
         posgres.setClave("Fg2100169388");
         cn=posgres.conectar();
+    }
+    public boolean insertar(){
+        setsSQL("insert into datos (dato) values (?)");
+        try {
+            PreparedStatement pst = cn.prepareStatement(getsSQL());
+            
+            //aqui envio los datos a la base de datos
+            pst.setDouble(1, Double.parseDouble(txtDato.getText()));
+            
+            int n=pst.executeUpdate();
+            if (n!=0) {
+                return true;
+            }else{
+                return false;
+            }
+            
+        } catch (NumberFormatException | SQLException e) {
+            JOptionPane.showConfirmDialog(null, e);
+            return false;
+        }
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -255,6 +306,11 @@ public class EstadisticaDescriptiva extends javax.swing.JFrame {
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -347,6 +403,11 @@ public class EstadisticaDescriptiva extends javax.swing.JFrame {
             JOptionPane.showConfirmDialog(rootPane, "No esta conectada a la base de datos");
         }
     }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        insertar();
+        inhabilitar();
+    }//GEN-LAST:event_btnGuardarActionPerformed
     public static void main(String args[]) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
