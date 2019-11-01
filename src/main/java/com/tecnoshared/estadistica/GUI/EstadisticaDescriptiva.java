@@ -99,6 +99,41 @@ public class EstadisticaDescriptiva extends javax.swing.JFrame {
             return false;
         }
     }
+    public boolean editar(){
+        setsSQL("update datos set dato=? where iddato=?");
+        try {
+            //preparo la llamada de la sentencia TSQL
+            PreparedStatement pst=cn.prepareStatement(getsSQL());
+            
+            pst.setDouble(1, Double.parseDouble(txtDato.getText()));
+            pst.setString(2, txtId.getText());
+            int n=pst.executeUpdate();
+            if (n!=0) {
+                return true;
+            }else{
+                return false;
+            }
+        } catch (NumberFormatException | SQLException e) {
+            JOptionPane.showConfirmDialog(null, e);
+            return false;
+        }
+    }
+    public boolean eliminar(){
+        setsSQL("delete from datos where iddato=?");
+        try {
+            PreparedStatement pst=cn.prepareStatement(getsSQL());
+            pst.setInt(1, Integer.parseInt(txtId.getText()));
+            int n=pst.executeUpdate();
+            if (n!=0) {
+                return true;
+            }else{
+                return false;
+            }
+        } catch (NumberFormatException | SQLException e) {
+            JOptionPane.showConfirmDialog(null, e);
+            return false;
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
