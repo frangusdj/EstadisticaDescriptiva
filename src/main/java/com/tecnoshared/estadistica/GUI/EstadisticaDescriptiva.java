@@ -1,8 +1,32 @@
 package com.tecnoshared.estadistica.GUI;
+
+import com.tecnoshared.estadistica.Logica.conexion;
+import java.sql.Connection;
+
 public class EstadisticaDescriptiva extends javax.swing.JFrame {
-    
+    conexion posgres = new conexion();
+    private Connection cn;
     public EstadisticaDescriptiva() {
         initComponents();
+        inhabilitar();
+    }
+    public void inhabilitar(){
+        txtClave.setEnabled(false);
+        txtDB.setEnabled(false);
+        txtDir.setEnabled(false);
+        txtUser.setEnabled(false);
+        
+        txtDir.setText("jdbc:postgresql://localhost:5432/");
+        txtDB.setText("Datos");
+        txtUser.setText("postgres");
+        txtClave.setText("Fg2100169388");
+     }
+    public void conectar(){
+        posgres.setUrl(txtDir.getText());
+        posgres.setDb(txtDB.getText());
+        posgres.setUser(txtUser.getText());
+        posgres.setClave("Fg2100169388");
+        cn=posgres.conectar();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -44,6 +68,11 @@ public class EstadisticaDescriptiva extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Conectar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -129,6 +158,10 @@ public class EstadisticaDescriptiva extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        conectar();
+    }//GEN-LAST:event_jButton1ActionPerformed
     public static void main(String args[]) {
                 java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
